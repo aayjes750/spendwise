@@ -1,0 +1,345 @@
+[
+  {
+    "name": "Chase Freedom Unlimited",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "dining": 0.03,
+      "drugstore": 0.03,
+      "catch_all": 0.015
+    }
+  },
+  {
+    "name": "Chase Freedom Flex",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "dining": 0.03,
+      "drugstore": 0.03,
+      "catch_all": 0.01
+    },
+    "note": "Features 5% rotating quarterly categories up to $1,500"
+  },
+  {
+    "name": "Chase Sapphire Preferred",
+    "annual_fee": 95.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 1000.0, 
+    "signup_bonus_spend_requirement": 5000.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel": 0.05,
+      "dining": 0.03,
+      "gas": 0.03,
+      "streaming": 0.03,
+      "catch_all": 0.01
+    }
+  },
+  {
+    "name": "Chase Sapphire Reserve",
+    "annual_fee": 550.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 1000.0,
+    "signup_bonus_spend_requirement": 6000.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel_portal_booking": 0.08,
+      "travel": 0.03,
+      "dining": 0.03,
+      "catch_all": 0.01
+    },
+    "note": "Includes a $300 annual statement credit that automatically refunds the first $300 spent on any travel category."
+  },
+  {
+    "name": "Chase Ink Business Cash",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 1000.0,
+    "signup_bonus_spend_requirement": 8000.0,
+    "signup_bonus_timeline_months": 4,
+    "reward_rates": {
+      "office_supplies": 0.05,
+      "internet_cable_phone": 0.05,
+      "dining": 0.02,
+      "gas": 0.02,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "combined_business_bonus_categories",
+    "spending_cap_limit": 25000.0,
+    "reward_rate_after_cap": 0.01,
+    "note": "Yields 5% on office supplies/utilities and 2% on dining/gas up to a combined $25,000 spent per anniversary year."
+  },
+  {
+    "name": "Chase Slate",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.0
+    },
+    "note": "A pure balance transfer card. Offers an extended 0% intro APR window but does not yield cash back or points rewards."
+  },
+  {
+    "name": "Chase Slate Edge",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.0
+    },
+    "note": "Designed for credit building and debt consolidation. Features a automatic review for an APR drop and credit line increase rather than active cash rewards."
+  },
+  {
+    "name": "Chase Freedom Rise",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 25.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "dining": 0.03,
+      "catch_all": 0.015
+    },
+    "spending_cap_category": "dining",
+    "spending_cap_limit": 6000.0,
+    "reward_rate_after_cap": 0.015,
+    "note": "Flagship starter card yielding flat 1.5% back. Sign-up bonus is structured as a $25 credit achieved upon activating automatic payments. Dining is boosted to 3% for the first 6 months up to $6,000."
+  },
+  {
+    "name": "Amex Gold",
+    "annual_fee": 325.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 1000.0,
+    "signup_bonus_spend_requirement": 8000.0,
+    "signup_bonus_timeline_months": 6,
+    "reward_rates": {
+      "dining": 0.04,
+      "grocery": 0.04,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "grocery",
+    "spending_cap_limit": 25000.0,
+    "reward_rate_after_cap": 0.01
+  },
+  {
+    "name": "Amex Blue Cash Preferred",
+    "annual_fee": 95.0,
+    "annual_fee_waived_first_year": true,
+    "signup_bonus_value": 250.0,
+    "signup_bonus_spend_requirement": 3000.0,
+    "signup_bonus_timeline_months": 6,
+    "reward_rates": {
+      "grocery": 0.06,
+      "streaming": 0.06,
+      "gas": 0.03,
+      "transit": 0.03,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "grocery",
+    "spending_cap_limit": 6000.0,
+    "reward_rate_after_cap": 0.01
+  },
+  {
+    "name": "Amex Blue Cash Everyday",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 2000.0,
+    "signup_bonus_timeline_months": 6,
+    "reward_rates": {
+      "grocery": 0.03,
+      "online_retail": 0.03,
+      "gas": 0.03,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "grocery",
+    "spending_cap_limit": 6000.0,
+    "reward_rate_after_cap": 0.01
+  },
+  {
+    "name": "Capital One SavorOne",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "dining": 0.03,
+      "entertainment": 0.03,
+      "grocery": 0.03,
+      "streaming": 0.03,
+      "catch_all": 0.01
+    }
+  },
+  {
+    "name": "Capital One Venture X",
+    "annual_fee": 395.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 750.0,
+    "signup_bonus_spend_requirement": 4000.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel": 0.05,
+      "catch_all": 0.02
+    }
+  },
+  {
+    "name": "Capital One Quicksilver",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel": 0.05,
+      "catch_all": 0.015
+    }
+  },
+  {
+    "name": "Capital One Venture Rewards",
+    "annual_fee": 95.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 750.0,
+    "signup_bonus_spend_requirement": 4000.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel_portal_booking": 0.05,
+      "catch_all": 0.02
+    },
+    "note": "75,000 bonus miles valued at roughly $750 in travel credit."
+  },
+  {
+    "name": "Capital One VentureOne Rewards",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "travel_portal_booking": 0.05,
+      "catch_all": 0.0125
+    },
+    "note": "No-annual-fee travel card earning flat 1.25x miles on all purchases."
+  },
+  {
+    "name": "Capital One QuicksilverOne",
+    "annual_fee": 39.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "travel_portal_booking": 0.05,
+      "catch_all": 0.015
+    },
+    "note": "For building credit with average scores while earning flat 1.5% cash back."
+  },
+  {
+    "name": "Capital One Platinum",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.0
+    },
+    "note": "A pure credit-building card with $0 annual fee and no cash rewards."
+  },
+  {
+    "name": "Citi Double Cash",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 1500.0,
+    "signup_bonus_timeline_months": 6,
+    "reward_rates": {
+      "catch_all": 0.02
+    }
+  },
+  {
+    "name": "Citi Custom Cash",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 1500.0,
+    "signup_bonus_timeline_months": 6,
+    "reward_rates": {
+      "highest_spending_category": 0.05,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "highest_spending_category",
+    "spending_cap_limit": 6000.0,
+    "reward_rate_after_cap": 0.01
+  },
+  {
+    "name": "Wells Fargo Active Cash",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 500.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "catch_all": 0.02
+    }
+  },
+  {
+    "name": "Discover it Cash Back",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 150.0,
+    "signup_bonus_spend_requirement": 0.0,
+    "signup_bonus_timeline_months": 12,
+    "reward_rates": {
+      "catch_all": 0.01
+    },
+    "note": "Uses an end-of-year cashback match strategy"
+  },
+  {
+    "name": "Bank of America Customized Cash Rewards",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 1000.0,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "custom_choice_category": 0.03,
+      "grocery": 0.02,
+      "wholesale_clubs": 0.02,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "combined_bonus_categories",
+    "spending_cap_limit": 10000.0,
+    "reward_rate_after_cap": 0.01,
+    "note": "Yields 3% on a chosen category and 2% on groceries/wholesale clubs up to a combined $2,500/quarter ($10,000/year)."
+  },
+  {
+    "name": "U.S. Bank Cash Plus",
+    "annual_fee": 0.0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 200.0,
+    "signup_bonus_spend_requirement": 1000.0,
+    "signup_bonus_timeline_months": 4,
+    "reward_rates": {
+      "custom_choice_five_percent_tier": 0.05,
+      "streaming": 0.02,
+      "gas": 0.02,
+      "grocery": 0.02,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "custom_choice_five_percent_tier",
+    "spending_cap_limit": 8000.0,
+    "reward_rate_after_cap": 0.01,
+    "note": "Yields 5% on two categories of your choice up to $2,000/quarter ($8,000/year total)."
+  }
+]
