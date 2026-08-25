@@ -1,33 +1,31 @@
+import os
+import json
+from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
-import json
 
 from models import SpendingProfile, CardEvaluationResult, CreditCard, MultiCardWalletResult
 from engine import rank_cards_for_profile, optimize_wallet_combo
 
 app = FastAPI(title="SpendWise API")
 
-# Enable CORS for React dev server
-# Enable CORS for React dev server & production Vercel frontend
-# Enable CORS for React dev server & production Vercel frontend
-origins = [
-    "https://spendwise-indol-iota.vercel.app",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+# Health check root route
+@app.get("/")
+def health_check():
+    return {"status": "ok", "message": "SpendWise API is running"}
 
+# Enable universal CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 def load_card_database() -> List[CreditCard]:
-    with open("cards_seed.json", "r") as f:
+    json_path = os.path.join(os.path.dirname(__file__), "cards_seed.json")
+    with open(json_path, "r") as f:
         data = json.load(f)
     return [CreditCard(**card) for card in data]
 
