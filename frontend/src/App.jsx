@@ -33,10 +33,10 @@ export default function App() {
     setLoading(true);
     try {
       if (mode === 'single') {
-        const response = await axios.post('http://localhost:8000/api/optimize', spending);
+        const response = await axios.post('https://spendwise-api-b5im.onrender.com/api/optimize', spending);
         setResults(response.data);
       } else {
-        const response = await axios.post('http://localhost:8000/api/optimize-wallet', spending);
+        const response = await axios.post('https://spendwise-api-b5im.onrender.com/api/optimize-wallet', spending);
         setWalletResult(response.data);
       }
       setHasCalculated(true);
