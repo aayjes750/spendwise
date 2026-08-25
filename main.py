@@ -9,9 +9,10 @@ from engine import rank_cards_for_profile, optimize_wallet_combo
 app = FastAPI(title="SpendWise API")
 
 # Enable CORS for React dev server
+# Enable CORS for React dev server & production Vercel frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:.*|http://127\.0\.0\.1:.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
