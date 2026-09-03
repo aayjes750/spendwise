@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { DollarSign, Award, TrendingUp, CreditCard as CardIcon, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+import { DollarSign, Award, TrendingUp, CreditCard as CardIcon, ChevronDown, ChevronUp, Sparkles, ShieldCheck } from 'lucide-react';
 
 const CATEGORIES = [
   { id: 'grocery', label: 'Groceries', defaultVal: 6000 },
@@ -15,7 +15,8 @@ export default function App() {
   const [spending, setSpending] = useState(
     CATEGORIES.reduce((acc, cat) => ({ ...acc, [cat.id]: cat.defaultVal }), {})
   );
-  const [mode, setMode] = useState('single'); // 'single' or 'wallet'
+  // Modes: 'single' | 'wallet' | 'no-fee'
+  const [mode, setMode] = useState('single');
   const [results, setResults] = useState([]);
   const [walletResult, setWalletResult] = useState(null);
   const [expandedCard, setExpandedCard] = useState(null);
@@ -35,14 +36,17 @@ export default function App() {
       if (mode === 'single') {
         const response = await axios.post('https://spendwise-api-b5im.onrender.com/api/optimize', spending);
         setResults(response.data);
-      } else {
+      } else if (mode === 'wallet') {
         const response = await axios.post('https://spendwise-api-b5im.onrender.com/api/optimize-wallet', spending);
         setWalletResult(response.data);
+      } else if (mode === 'no-fee') {
+        const response = await axios.post('https://spendwise-api-b5im.onrender.com/api/optimize-no-fee', spending);
+        setResults(response.data);
       }
       setHasCalculated(true);
     } catch (err) {
       console.error('Calculation failed:', err);
-      alert('Failed to connect to backend engine. Ensure FastAPI is running on port 8000.');
+      alert('Failed to connect to backend engine. Ensure FastAPI is running on Render.');
     } finally {
       setLoading(false);
     }
@@ -63,8 +67,8 @@ export default function App() {
           Input your estimated annual budget to rank credit cards by mathematically validated Net Year 1 Value.
         </p>
 
-        {/* Mode Selector */}
-        <div className="flex justify-center gap-3 mt-6">
+        {/* 3-Way Mode Selector */}
+        <div className="flex flex-wrap justify-center gap-3 mt-6">
           <button
             onClick={() => { setMode('single'); setHasCalculated(false); }}
             className={`px-5 py-2 rounded-xl font-semibold text-sm transition cursor-pointer ${
@@ -84,6 +88,16 @@ export default function App() {
             }`}
           >
             <Sparkles className="w-4 h-4 text-amber-400" /> Optimal 2-Card Combo
+          </button>
+          <button
+            onClick={() => { setMode('no-fee'); setHasCalculated(false); }}
+            className={`px-5 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 transition cursor-pointer ${
+              mode === 'no-fee'
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
+                : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> No Annual Fee ($0)
           </button>
         </div>
       </header>
@@ -126,7 +140,13 @@ export default function App() {
             disabled={loading}
             className="w-full mt-8 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 cursor-pointer"
           >
-            {loading ? 'Evaluating Cards...' : mode === 'single' ? 'Calculate Optimal Cards' : 'Find Best 2-Card Combo'}
+            {loading
+              ? 'Evaluating Cards...'
+              : mode === 'single'
+              ? 'Calculate Optimal Cards'
+              : mode === 'wallet'
+              ? 'Find Best 2-Card Combo'
+              : 'Find Best $0 Annual Fee Cards'}
           </button>
         </section>
 
@@ -135,7 +155,11 @@ export default function App() {
           <div className="flex items-center justify-between pb-2">
             <h2 className="text-xl font-bold flex items-center gap-2 text-white">
               <Award className="w-5 h-5 text-amber-400" />
-              {mode === 'single' ? 'Ranked Recommendations' : 'Optimal 2-Card Wallet Pairing'}
+              {mode === 'single'
+                ? 'Ranked Recommendations'
+                : mode === 'wallet'
+                ? 'Optimal 2-Card Wallet Pairing'
+                : 'Top No-Annual-Fee Cards ($0 Fee)'}
             </h2>
           </div>
 
@@ -219,7 +243,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Expandable Category Breakdown Accordion */}
+                  {/* Category Breakdown Accordion */}
                   <button
                     onClick={() => setExpandedCard(isExpanded ? null : card.card_name)}
                     className="w-full flex items-center justify-between text-xs text-slate-400 hover:text-slate-200 pt-2 border-t border-slate-700/50 cursor-pointer"

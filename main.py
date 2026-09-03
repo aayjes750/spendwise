@@ -3,6 +3,7 @@ import json
 from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 
 from models import SpendingProfile, CardEvaluationResult, CreditCard, MultiCardWalletResult
 from engine import rank_cards_for_profile, optimize_wallet_combo
@@ -38,3 +39,13 @@ def optimize_cards(spending: SpendingProfile):
 def optimize_wallet(spending: SpendingProfile):
     cards = load_card_database()
     return optimize_wallet_combo(cards, spending, wallet_size=2)
+@app.post("/api/optimize-no-fee", response_model=List[CardEvaluationResult])
+def optimize_no_annual_fee_cards(spending: SpendingProfile):
+    try:
+        cards = load_card_database()
+        # Filter cards where annual_fee is 0
+        no_fee_cards = [c for c in cards if c.annual_fee == 0.0]
+        return rank_cards_for_profile(no_fee_cards, spending)
+    except Exception as e:
+        print(f"Error in /api/optimize-no-fee: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
