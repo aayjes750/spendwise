@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Dict, List, Optional
 
 class SpendingProfile(BaseModel):
@@ -12,20 +12,31 @@ class SpendingProfile(BaseModel):
     catch_all: float = Field(default=0.0, ge=0, alias="catchAll")
 
 class CreditCard(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    id: str
-    card_name: str = Field(alias="cardName")
-    issuer: str
-    annual_fee: float = Field(alias="annualFee")
+    id: Optional[str] = None
+    card_name: str = Field(default="", alias="name")
+    issuer: Optional[str] = "Generic"
+    annual_fee: float = Field(default=0.0, alias="annual_fee")
+    annual_fee_waived_first_year: bool = Field(default=False, alias="annual_fee_waived_first_year")
     credits: float = 0.0
-    signup_bonus_value: float = Field(default=0.0, alias="signupBonusValue")
-    signup_bonus_spend_req: float = Field(default=0.0, alias="signupBonusSpendReq")
+    signup_bonus_value: float = Field(default=0.0, alias="signup_bonus_value")
+    signup_bonus_spend_req: float = Field(default=0.0, alias="signup_bonus_spend_requirement")
     point_valuation: float = Field(default=0.01, alias="pointValuation")
-    rates: Dict[str, float]
+    rates: Dict[str, float] = Field(default_factory=dict, alias="reward_rates")
     cap_cat: Optional[str] = Field(default=None, alias="capCat")
     cap_limit: Optional[float] = Field(default=None, alias="capLimit")
     rate_after_cap: Optional[float] = Field(default=None, alias="rateAfterCap")
+    note: Optional[str] = None
+
+    @model_validator(mode="after")
+    def set_defaults(self):
+        if not self.id:
+            self.id = self.card_name.lower().replace(" ", "_")
+        if not self.issuer or self.issuer == "Generic":
+            first_word = self.card_name.split()[0] if self.card_name else "Unknown"
+            self.issuer = first_word
+        return self
 
 class CardEvaluationResult(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
