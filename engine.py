@@ -124,7 +124,10 @@ def calculate_card_rewards(card: CreditCard, spd: SpendingProfile) -> CardEvalua
 
     tot_spend = sum(spend_map.values())
     sub_earned = card.signup_bonus_value if tot_spend >= card.signup_bonus_spend_req else 0.0
-    eff_fee = max(0.0, card.annual_fee - card.credits)
+    # Year 1 fee should be $0 if the card waives its annual fee for the
+    # first year -- this field existed on the model but was never read.
+    base_fee = 0.0 if card.annual_fee_waived_first_year else card.annual_fee
+    eff_fee = max(0.0, base_fee - card.credits)
     net_val = tot_rewards + sub_earned - eff_fee
 
     return CardEvaluationResult(
