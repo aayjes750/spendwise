@@ -1,5 +1,5 @@
 from itertools import combinations
-from typing import List, Dict
+from typing import List, Dict, Optional
 from models import CreditCard, SpendingProfile, CardEvaluationResult, MultiCardWalletResult
 
 def calculate_card_rewards(card: CreditCard, spd: SpendingProfile) -> CardEvaluationResult:
@@ -65,49 +65,75 @@ def calculate_card_rewards(card: CreditCard, spd: SpendingProfile) -> CardEvalua
         breakdown=breakdown
     )
 
-def rank_cards_for_profile(cards: List[CreditCard], spd: SpendingProfile) -> List[CardEvaluationResult]:
-    results = [calculate_card_rewards(c, spd) for c in cards]
+def rank_cards_for_profile(
+    cards: List[CreditCard], 
+    spd: SpendingProfile, 
+    include_business: bool = False
+) -> List[CardEvaluationResult]:
+    filtered_cards = [c for c in cards if include_business or not c.is_business]
+    results = [calculate_card_rewards(c, spd) for c in filtered_cards]
     return sorted(results, key=lambda x: x.net_first_year_value, reverse=True)
 
-def optimize_wallet_combo(cards: List[CreditCard], spd: SpendingProfile, wallet_size: int = 2) -> MultiCardWalletResult:
-    spend_map = spd.model_dump()
-    best_combo = None
-    best_net_yield = -float("inf")
-    best_assignments = {}
+def evaluate_single_wallet(
+    combo: tuple, 
+    card_evals: Dict[str, CardEvaluationResult], 
+    spend_map: Dict[str, float]
+) -> MultiCardWalletResult:
+    category_assignment = {}
+    total_rewards = 0.0
 
-    card_evals = {c.id: calculate_card_rewards(c, spd) for c in cards}
+    for cat, spend in spend_map.items():
+        best_rate = -1.0
+        best_card_id = combo[0].id
+        for card in combo:
+            effective_rate = card.rates.get(cat, card.rates.get("catch_all", 0.01)) * (card.point_valuation / 0.01)
+            if effective_rate > best_rate:
+                best_rate = effective_rate
+                best_card_id = card.id
+        
+        category_assignment[cat] = best_card_id
+        total_rewards += spend * best_rate
 
-    for combo in combinations(cards, wallet_size):
-        category_assignment = {}
-        total_rewards = 0.0
+    chosen_evals = [card_evals[c.id] for c in combo]
+    total_fee = sum(c.effective_annual_fee for c in chosen_evals)
+    total_sub = sum(c.signup_bonus_earned for c in chosen_evals)
+    net_yield = total_rewards + total_sub - total_fee
 
-        for cat, spend in spend_map.items():
-            best_rate = -1.0
-            best_card_id = combo[0].id
-            for card in combo:
-                effective_rate = card.rates.get(cat, card.rates.get("catch_all", 0.01)) * (card.point_valuation / 0.01)
-                if effective_rate > best_rate:
-                    best_rate = effective_rate
-                    best_card_id = card.id
-            
-            category_assignment[cat] = best_card_id
-            total_rewards += spend * best_rate
-
-        total_fee = sum(card_evals[c.id].effective_annual_fee for c in combo)
-        total_sub = sum(card_evals[c.id].signup_bonus_earned for c in combo)
-        net_yield = total_rewards + total_sub - total_fee
-
-        if net_yield > best_net_yield:
-            best_net_yield = net_yield
-            best_combo = combo
-            best_assignments = category_assignment
-
-    chosen_evals = [card_evals[c.id] for c in best_combo]
     return MultiCardWalletResult(
         cards=chosen_evals,
-        total_net_value=round(best_net_yield, 2),
-        total_annual_rewards=round(sum(c.annual_rewards for c in chosen_evals), 2),
-        total_effective_fee=round(sum(c.effective_annual_fee for c in chosen_evals), 2),
-        total_signup_bonus=round(sum(c.signup_bonus_earned for c in chosen_evals), 2),
-        best_category_assignments=best_assignments
+        total_net_value=round(net_yield, 2),
+        total_annual_rewards=round(total_rewards, 2),
+        total_effective_fee=round(total_fee, 2),
+        total_signup_bonus=round(total_sub, 2),
+        best_category_assignments=category_assignment
     )
+
+def optimize_top_wallets(
+    cards: List[CreditCard],
+    spd: SpendingProfile,
+    wallet_size: int = 2,
+    top_n: int = 3,
+    include_business: bool = False
+) -> List[MultiCardWalletResult]:
+    filtered_cards = [c for c in cards if include_business or not c.is_business]
+    spend_map = spd.model_dump()
+    card_evals = {c.id: calculate_card_rewards(c, spd) for c in filtered_cards}
+
+    evaluated_wallets = [
+        evaluate_single_wallet(combo, card_evals, spend_map)
+        for combo in combinations(filtered_cards, wallet_size)
+    ]
+
+    evaluated_wallets.sort(key=lambda w: w.total_net_value, reverse=True)
+    return evaluated_wallets[:top_n]
+
+def optimize_wallet_combo(
+    cards: List[CreditCard], 
+    spd: SpendingProfile, 
+    wallet_size: int = 2,
+    include_business: bool = False
+) -> MultiCardWalletResult:
+    top_wallets = optimize_top_wallets(cards, spd, wallet_size=wallet_size, top_n=1, include_business=include_business)
+    if not top_wallets:
+        raise ValueError("No eligible cards found to form a wallet.")
+    return top_wallets[0]
