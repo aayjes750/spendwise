@@ -31,9 +31,18 @@ class CreditCard(BaseModel):
     )
     point_valuation: float = Field(default=0.01, alias="pointValuation")
     rates: Dict[str, float] = Field(default_factory=dict, alias="reward_rates")
-    cap_cat: Optional[str] = Field(default=None, alias="capCat")
-    cap_limit: Optional[float] = Field(default=None, alias="capLimit")
-    rate_after_cap: Optional[float] = Field(default=None, alias="rateAfterCap")
+
+    # NOTE: these three were previously aliased to "capCat" / "capLimit" /
+    # "rateAfterCap", which never matched any key actually present in
+    # cards_seed.json ("spending_cap_category" / "spending_cap_limit" /
+    # "reward_rate_after_cap"). Because the model allows extra fields,
+    # Pydantic silently accepted the mismatch instead of erroring, so
+    # cap_cat/cap_limit/rate_after_cap were None for every card, and no
+    # spending cap was ever actually enforced. Fixed to match the real data.
+    cap_cat: Optional[str] = Field(default=None, alias="spending_cap_category")
+    cap_limit: Optional[float] = Field(default=None, alias="spending_cap_limit")
+    rate_after_cap: Optional[float] = Field(default=None, alias="reward_rate_after_cap")
+
     note: Optional[str] = None
 
     @model_validator(mode="after")
