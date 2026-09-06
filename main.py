@@ -102,3 +102,20 @@ def optimize_no_annual_fee_cards(
     except Exception as e:
         print(f"Error in /api/optimize-no-fee: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/optimize-student", response_model=List[CardEvaluationResult])
+def optimize_student_cards(
+    spending: SpendingProfile,
+):
+    try:
+        cards = load_card_database()
+        student_cards = [c for c in cards if c.is_student]
+        return rank_cards_for_profile(
+            student_cards,
+            spending,
+            include_business=False,
+        )
+    except Exception as e:
+        print(f"Error in /api/optimize-student: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

@@ -45,6 +45,9 @@ export default function App() {
       } else if (mode === 'no-fee') {
         const response = await axios.post(`https://spendwise-api-b5im.onrender.com/api/optimize-no-fee${queryParam}`, spending);
         setResults(response.data);
+      } else if (mode === 'student') {
+        const response = await axios.post(`https://spendwise-api-b5im.onrender.com/api/optimize-student`, spending);
+        setResults(response.data);
       }
       setHasCalculated(true);
     } catch (err) {
@@ -61,6 +64,7 @@ export default function App() {
     single: { tab: 'Rank single cards', heading: 'Ranked cards', button: 'Rank my cards' },
     wallet: { tab: 'Best card pairs', heading: 'Best card pairs', button: 'Find best pairs' },
     'no-fee': { tab: 'No annual fee', heading: 'No annual fee cards', button: 'Find $0-fee cards' },
+    student: { tab: 'For college students', heading: 'Cards for students', button: 'Find student cards' },
   };
 
   return (
@@ -161,11 +165,22 @@ export default function App() {
           {/* Results */}
           <section className="lg:col-span-7">
             <h2 className="font-['Fraunces',_serif] text-xl mb-1">{modeCopy[mode].heading}</h2>
-            <p className="text-sm text-[#4B5B54] mb-5">
+            <p className="text-sm text-[#4B5B54] mb-1">
               {mode === 'wallet'
                 ? 'Two-card combinations ranked by combined first-year value.'
+                : mode === 'student'
+                ? 'Cards built for no or limited credit history, ranked by first-year value.'
                 : 'Ranked by projected net value in the first year.'}
             </p>
+            {mode === 'student' && (
+              <p className="text-xs text-[#7C8A82] mb-5 max-w-md">
+                This list covers cards designed to approve people with no credit history at all.
+                Plenty of students also get approved for other cards on this list depending on
+                their individual credit file — this section isn't the only option, just the
+                surest bet if you're starting from zero.
+              </p>
+            )}
+            {mode !== 'student' && <div className="mb-5" />}
 
             {!hasCalculated ? (
               <div className="border border-dashed border-[#B7C4B2] py-16 text-center text-[#7C8A82]">

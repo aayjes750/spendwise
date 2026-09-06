@@ -106,6 +106,7 @@
     "signup_bonus_value": 25.0,
     "signup_bonus_spend_requirement": 0.0,
     "signup_bonus_timeline_months": 3,
+    "is_student": true,
     "reward_rates": {
       "dining": 0.03,
       "catch_all": 0.015
@@ -251,6 +252,7 @@
     "signup_bonus_value": 0.0,
     "signup_bonus_spend_requirement": 0.0,
     "signup_bonus_timeline_months": 0,
+    "is_student": true,
     "reward_rates": {
       "catch_all": 0.0
     },
@@ -341,5 +343,105 @@
     "spending_cap_limit": 8000.0,
     "reward_rate_after_cap": 0.01,
     "note": "Yields 5% on two categories of your choice up to $2,000/quarter ($8,000/year total)."
+  },
+  {
+    "name": "Discover it Student Cash Back",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 60,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 12,
+    "reward_rates": {
+      "catch_all": 0.01
+    },
+    "is_student": true,
+    "note": "No credit history required. Real card includes Discover's Cashback Match (doubles year-one earnings) and 5% rotating quarterly categories, both approximated here."
+  },
+  {
+    "name": "Discover it Student Chrome",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 60,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 12,
+    "reward_rates": {
+      "gas": 0.02,
+      "dining": 0.02,
+      "catch_all": 0.01
+    },
+    "spending_cap_category": "gas_dining_combined_categories",
+    "spending_cap_limit": 4000,
+    "reward_rate_after_cap": 0.01,
+    "is_student": true,
+    "note": "No credit history required."
+  },
+  {
+    "name": "Capital One SavorOne Student Cash Rewards",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "dining": 0.03,
+      "entertainment": 0.03,
+      "grocery": 0.03,
+      "streaming": 0.03,
+      "catch_all": 0.01
+    },
+    "is_student": true,
+    "note": "Same reward structure as the standard SavorOne, with student-friendly approval requirements."
+  },
+  {
+    "name": "Capital One Quicksilver Student Cash Rewards",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.015
+    },
+    "is_student": true,
+    "note": "Flat 1.5% back, student-friendly approval requirements."
+  },
+  {
+    "name": "Bank of America Travel Rewards for Students",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 100,
+    "signup_bonus_spend_requirement": 1000,
+    "signup_bonus_timeline_months": 3,
+    "reward_rates": {
+      "catch_all": 0.015
+    },
+    "is_student": true,
+    "note": "No foreign transaction fees; good for study-abroad spending."
+  },
+  {
+    "name": "Petal 2 Visa",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.0125
+    },
+    "is_student": true,
+    "note": "Approved using cash flow/banking history instead of a credit score -- no credit history required at all. Real card can earn up to 1.5% after 12 on-time payments; modeled here at an average 1.25%."
+  },
+  {
+    "name": "Deserve EDU Mastercard",
+    "annual_fee": 0,
+    "annual_fee_waived_first_year": false,
+    "signup_bonus_value": 0,
+    "signup_bonus_spend_requirement": 0,
+    "signup_bonus_timeline_months": 0,
+    "reward_rates": {
+      "catch_all": 0.01
+    },
+    "is_student": true,
+    "note": "Designed for international students with no U.S. credit history; no Social Security number required. No foreign transaction fees."
   }
 ]

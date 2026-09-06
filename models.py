@@ -20,6 +20,7 @@ class CreditCard(BaseModel):
     card_name: str = Field(default="", alias="name")
     issuer: Optional[str] = "Generic"
     is_business: bool = Field(default=False, alias="is_business")
+    is_student: bool = Field(default=False, alias="is_student")
     annual_fee: float = Field(default=0.0, alias="annual_fee")
     annual_fee_waived_first_year: bool = Field(
         default=False, alias="annual_fee_waived_first_year"
@@ -59,6 +60,12 @@ class CreditCard(BaseModel):
         name_lower = self.card_name.lower()
         if "business" in name_lower or "ink" in name_lower:
             self.is_business = True
+
+        # Flag student cards automatically if the name says so; cards without
+        # "student" in the name can still be marked explicitly in the seed
+        # data (e.g. beginner/credit-building cards aimed at the same audience).
+        if "student" in name_lower:
+            self.is_student = True
 
         return self
 
