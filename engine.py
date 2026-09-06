@@ -12,6 +12,9 @@ from models import CreditCard, SpendingProfile, CardEvaluationResult, MultiCardW
 # cap actually spans grocery + a chosen category, not grocery+gas+dining).
 COMBINED_CAP_GROUPS = {
     "combined_bonus_categories": ["grocery", "gas", "dining"],
+    "combined_business_bonus_categories": ["dining", "gas"],
+    "gas_dining_combined_categories": ["gas", "dining"],
+    "ink_preferred_combined_categories": ["travel", "dining"],
 }
 
 # cap_cat values that don't name a fixed category directly -- instead the
@@ -159,21 +162,21 @@ def evaluate_single_wallet(
     spend_map: Dict[str, float],
 ) -> MultiCardWalletResult:
     category_assignment: Dict[str, str] = {}
-    total_rewards = 0.0
-    # Shared across every category in this wallet so a combined cap on one
-    # card is tracked correctly no matter how many categories land on it.
+    # Track each card's ACTUAL contribution within this wallet -- not its
+    # standalone full-spend value. Previously this function reused
+    # card_evals[c.id] (each card evaluated as if it alone captured 100% of
+    # spending) to populate the per-card breakdown shown to the user, so the
+    # displayed per-card numbers never summed to the wallet's real total.
+    per_card_rewards: Dict[str, float] = {c.id: 0.0 for c in combo}
+    per_card_breakdown: Dict[str, Dict[str, float]] = {c.id: {} for c in combo}
     cap_usage: Dict[str, float] = {}
-    # Each card's dynamic "top category" only depends on the spend profile,
-    # not on the wallet combo, so resolve it once per card up front.
     dynamic_cats = {card.id: _resolve_dynamic_bonus_category(card, spend_map) for card in combo}
 
     for cat, spend in spend_map.items():
         # NOTE: we still pick the "best" card per category using the nominal
         # (pre-cap-exhaustion) rate. A fully optimal assignment would need to
         # jointly solve category assignment + cap exhaustion (e.g. an ILP);
-        # this greedy approach is a documented simplification. What it no
-        # longer does is silently ignore caps when computing the payout for
-        # whichever card gets picked -- that was the actual bug.
+        # this greedy approach is a documented simplification.
         best_rate = -1.0
         best_card = combo[0]
         for card in combo:
@@ -183,11 +186,37 @@ def evaluate_single_wallet(
                 best_card = card
 
         category_assignment[cat] = best_card.id
-        total_rewards += _earn_for_category(
-            best_card, cat, spend, cap_usage, dynamic_cats[best_card.id]
+        earned = _earn_for_category(best_card, cat, spend, cap_usage, dynamic_cats[best_card.id])
+        per_card_rewards[best_card.id] += earned
+        per_card_breakdown[best_card.id][cat] = round(earned, 2)
+
+    # Categories a card wasn't assigned still appear in its breakdown at $0,
+    # so the UI can show a consistent set of categories per card.
+    for card in combo:
+        for cat in spend_map:
+            per_card_breakdown[card.id].setdefault(cat, 0.0)
+
+    total_rewards = sum(per_card_rewards.values())
+
+    chosen_evals = []
+    for card in combo:
+        base_eval = card_evals[card.id]  # correct signup bonus + effective fee for this card, unsplit
+        chosen_evals.append(
+            CardEvaluationResult(
+                card_id=card.id,
+                card_name=card.card_name,
+                issuer=card.issuer,
+                annual_fee=card.annual_fee,
+                effective_annual_fee=base_eval.effective_annual_fee,
+                signup_bonus_earned=base_eval.signup_bonus_earned,
+                annual_rewards=round(per_card_rewards[card.id], 2),
+                net_first_year_value=round(
+                    per_card_rewards[card.id] + base_eval.signup_bonus_earned - base_eval.effective_annual_fee, 2
+                ),
+                breakdown=per_card_breakdown[card.id],
+            )
         )
 
-    chosen_evals = [card_evals[c.id] for c in combo]
     total_fee = sum(c.effective_annual_fee for c in chosen_evals)
     total_sub = sum(c.signup_bonus_earned for c in chosen_evals)
     net_yield = total_rewards + total_sub - total_fee
