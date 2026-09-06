@@ -45,6 +45,9 @@ export default function App() {
       } else if (mode === 'no-fee') {
         const response = await axios.post(`https://spendwise-api-b5im.onrender.com/api/optimize-no-fee${queryParam}`, spending);
         setResults(response.data);
+      } else if (mode === 'no-fee-wallet') {
+        const response = await axios.post(`https://spendwise-api-b5im.onrender.com/api/optimize-wallets-no-fee${queryParam}&top_n=3`, spending);
+        setWalletCombos(response.data);
       } else if (mode === 'student') {
         const response = await axios.post(`https://spendwise-api-b5im.onrender.com/api/optimize-student`, spending);
         setResults(response.data);
@@ -64,6 +67,7 @@ export default function App() {
     single: { tab: 'Rank single cards', heading: 'Ranked cards', button: 'Rank my cards' },
     wallet: { tab: 'Best card pairs', heading: 'Best card pairs', button: 'Find best pairs' },
     'no-fee': { tab: 'No annual fee', heading: 'No annual fee cards', button: 'Find $0-fee cards' },
+    'no-fee-wallet': { tab: 'No-fee pairs', heading: 'Best no-fee pairs', button: 'Find no-fee pairs' },
     student: { tab: 'For college students', heading: 'Cards for students', button: 'Find student cards' },
   };
 
@@ -166,7 +170,7 @@ export default function App() {
           <section className="lg:col-span-7">
             <h2 className="font-['Fraunces',_serif] text-xl mb-1">{modeCopy[mode].heading}</h2>
             <p className="text-sm text-[#4B5B54] mb-1">
-              {mode === 'wallet'
+              {mode === 'wallet' || mode === 'no-fee-wallet'
                 ? 'Two-card combinations ranked by combined first-year value.'
                 : mode === 'student'
                 ? 'Cards built for no or limited credit history, ranked by first-year value.'
@@ -186,7 +190,7 @@ export default function App() {
               <div className="border border-dashed border-[#B7C4B2] py-16 text-center text-[#7C8A82]">
                 <p className="text-sm">Set your spending, then calculate to see results here.</p>
               </div>
-            ) : mode === 'wallet' ? (
+            ) : mode === 'wallet' || mode === 'no-fee-wallet' ? (
               <div>
                 {walletCombos.map((wallet, comboIdx) => (
                   <div key={comboIdx} className="border-t border-[#C7D2C4] py-5 first:border-t-0 first:pt-0">

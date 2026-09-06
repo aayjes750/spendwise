@@ -119,3 +119,24 @@ def optimize_student_cards(
     except Exception as e:
         print(f"Error in /api/optimize-student: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/optimize-wallets-no-fee", response_model=List[MultiCardWalletResult])
+def optimize_no_fee_wallets(
+    spending: SpendingProfile,
+    wallet_size: int = Query(default=2, ge=2, le=3),
+    top_n: int = Query(default=3, ge=1, le=5),
+    include_business: bool = Query(default=False)
+):
+    try:
+        cards = load_card_database()
+        no_fee_cards = [c for c in cards if c.annual_fee == 0.0]
+        return optimize_top_wallets(
+            no_fee_cards,
+            spending,
+            wallet_size=wallet_size,
+            top_n=top_n,
+            include_business=include_business
+        )
+    except Exception as e:
+        print(f"Error in /api/optimize-wallets-no-fee: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
